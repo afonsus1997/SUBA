@@ -21,8 +21,8 @@ void setup(){
   Serial.println("     X - Esquerda");
   Serial.println("     A - Tras");
   Serial.println("     B -Direita");
-  car.attachMotor(5,6);
-  car.attachServo(9);
+  car.attachMotor(9,6);
+  car.attachServo(11);
 }
 
 void loop(){

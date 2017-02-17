@@ -3,7 +3,7 @@
 const int led = 10;
 const int fwd = 9;
 const int bwd = 6;
-const int sound;
+const int soundx;
 
 #define VEL_MAX 80
 #define VEL_MIN 0
@@ -125,9 +125,9 @@ void setPwmFrequency(int pin, int divisor) {
 }
 
 void p_warning() {
-	analogWrite(sound, 250);
+	//analogWrite(sound, 250);
 	delay(100);
-	analogWrite(sound, 0);
+	//analogWrite(sound, 0);
 }
 
 void change_values(char *buffer) {
@@ -169,12 +169,12 @@ void setPWM(int motor, int value) {
 
 	case fwd:
 		digitalWrite(bwd, LOW);
-		digitalWrite(fwd, value);
+		analogWrite(fwd, value);
 		break;
 
 	case bwd:
 		digitalWrite(fwd, LOW);
-		digitalWrite(bwd, value);
+		analogWrite(bwd, value);
 		break;
 	}
 }
