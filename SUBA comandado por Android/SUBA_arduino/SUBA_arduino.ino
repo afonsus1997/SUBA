@@ -4,6 +4,7 @@ const int led = 10;
 const int fwd = 9;
 const int bwd = 6;
 const int sound;
+int ledfadeval = 1;
 
 #define VEL_MAX 80
 #define VEL_MIN 0
@@ -26,9 +27,21 @@ void setup() {
 	pinMode(fwd, OUTPUT);
 	pinMode(bwd, OUTPUT);
 	pinMode(led, OUTPUT);
+	digitalWrite(led, HIGH);
+	delay(200);
+	digitalWrite(led, LOW);
+	delay(200);
+	digitalWrite(led, HIGH);
+	delay(200);
+	digitalWrite(led, LOW);
+	delay(200); 	
+	digitalWrite(led, HIGH);
+	delay(200);
+	digitalWrite(led, LOW);
+	delay(500);
+	digitalWrite(led, HIGH);
 
-
-  myservo.attach(9);
+  myservo.attach(11);
 
 	//set freq = 122 Hz
 	//setPwmFrequency(fwd, 256);
@@ -43,10 +56,12 @@ void setup() {
 }
 
 void loop() {
-
+		
         char ch;
    
 	while (Serial.available() > 0) {
+
+		
 
 		ch = Serial.read();
 		if (ch == 0x0D || ch == '\n') {
@@ -125,9 +140,9 @@ void setPwmFrequency(int pin, int divisor) {
 }
 
 void p_warning() {
-	analogWrite(sound, 250);
-	delay(100);
-	analogWrite(sound, 0);
+	analogWrite(led, 250);
+	delay(200);
+	analogWrite(led, 0);
 }
 
 void change_values(char *buffer) {
@@ -135,11 +150,14 @@ void change_values(char *buffer) {
 	int duty;
 
 	duty = (buffer[6] - '0') + (buffer[5] - '0') * 10 + (buffer[4] - '0') * 100;
-
+	int conv;
+	conv = map(duty, 0, 100, 0, 255);
 	if (buffer[3] == '-')
-		setPWM(bwd, duty/2);
+		//setPWM(bwd, duty/2);
+		setPWM(bwd, conv);
 	else
-		setPWM(fwd, duty/2);
+		//setPWM(fwd, duty/2);
+		setPWM(fwd, conv);
 
 	duty = (buffer[10] - '0') + (buffer[9] - '0') * 10
 			+ (buffer[8] - '0') * 100;
@@ -169,12 +187,14 @@ void setPWM(int motor, int value) {
 
 	case fwd:
 		digitalWrite(bwd, LOW);
-		digitalWrite(fwd, value);
+		analogWrite(fwd, value);
+		//analogWrite(led, value);
 		break;
 
 	case bwd:
 		digitalWrite(fwd, LOW);
-		digitalWrite(bwd, value);
+		analogWrite(bwd, value);
+		//analogWrite(led, value);
 		break;
 	}
 }
